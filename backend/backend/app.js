@@ -21,7 +21,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: "https://mindbloom-backend-00pi.onrender.com",
+  origin: "https://mindbloom-frontend-cr16.onrender.com",
   credentials: true, 
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
