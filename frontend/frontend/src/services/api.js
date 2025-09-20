@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://mindbloom-backend-00pi.onrender.com/api',
   withCredentials: true,
 
   timeout: 10000, 
