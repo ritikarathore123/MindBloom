@@ -3,6 +3,23 @@
 import { Music } from "../models/Music.js";
 
 // Create new music (only title & mediaUrl)
+
+
+// export const createMultipleMusic = async (req, res) => {
+//   try {
+//     const musicList = Array.isArray(req.body) ? req.body : []; // direct array
+
+//     if (musicList.length === 0) {
+//       return res.status(400).json({ message: "Please provide an array of music tracks" });
+//     }
+
+//     const newMusic = await Music.insertMany(musicList);
+//     res.status(201).json({ message: "Multiple music tracks created", music: newMusic });
+//   } catch (error) {
+//     console.error("Error creating multiple music tracks:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 export const createMusic = async (req, res) => {
   try {
     const { title, mediaUrl } = req.body;

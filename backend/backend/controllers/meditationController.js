@@ -2,17 +2,18 @@ import { Meditation } from "../models/Meditation.js";
 
 
 export const createMeditation = async (req, res) => {
+  console.log(error);
+    console.log("hye how ");
   try {
-    const { title, author, image, video, preview, description, duration } = req.body;
+    const { title, author, image, video, preview } = req.body;
 
     const meditation = await Meditation.create({
       title,
       author,
       image,
       video,
-      preview,
-      description,
-      duration,
+      preview
+  
     });
 
     res.status(201).json({ message: "Meditation created", meditation });

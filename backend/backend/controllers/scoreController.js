@@ -181,9 +181,101 @@
 // };
 
 
+// import { Score } from "../models/Score.js";
+// import { User } from "../models/User.js";
+
+// export const getAllScores = async (req, res) => {
+//   try {
+//     const scores = await Score.find();
+//     return res.status(200).json({
+//       message: "Data Fetched",
+//       results: scores.length,
+//       data: scores,
+//     });
+//   } catch (err) {
+//     return res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+
+// export const getScoreByRange = async (req, res) => {
+//   try {
+//     let total_score = Number(req.params.range);
+
+//     if (total_score >= 0 && total_score <= 4) total_score = "0 – 4";
+//     else if (total_score <= 9) total_score = "5 – 9";
+//     else if (total_score <= 14) total_score = "10 – 14";
+//     else if (total_score <= 19) total_score = "15 – 19";
+//     else if (total_score <= 27) total_score = "20 – 27";
+//     else if (total_score > 27) total_score = "Above 27";
+//     else
+//       return res
+//         .status(400)
+//         .json({ message: "Invalid numerical score provided." });
+
+//     const score = await Score.findOne({ total_score });
+
+//     if (!score)
+//       return res.status(404).json({ message: "Score range not found in DB" });
+
+//     return res.status(200).json({ message: "Score Matched", score });
+//   } catch (err) {
+//     return res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+
+// export const createScore = async (req, res) => {
+//   try {
+//     await Score.insertMany(req.body);
+//     return res.status(201).json({ message: "Scores Added" });
+//   } catch (err) {
+//     return res.status(400).json({ message: "Invalid Data Format" });
+//   }
+// };
+
+
+// export const submitUserScore = async (req, res) => {
+//   try {
+//     const userId = req.user?.id;
+//     const rawScore = Number(req.body?.score);
+
+//     if (!userId) return res.status(401).json({ message: "Unauthorized" });
+//     if (Number.isNaN(rawScore))
+//       return res.status(400).json({ message: "Invalid score" });
+
+//     let rangeKey;
+//     if (rawScore >= 0 && rawScore <= 4) rangeKey = "0 – 4";
+//     else if (rawScore <= 9) rangeKey = "5 – 9";
+//     else if (rawScore <= 14) rangeKey = "10 – 14";
+//     else if (rawScore <= 19) rangeKey = "15 – 19";
+//     else if (rawScore <= 27) rangeKey = "20 – 27";
+//     else rangeKey = "Above 27";
+
+//     const scoreDoc = await Score.findOne({ total_score: rangeKey });
+//     if (!scoreDoc)
+//       return res
+//         .status(404)
+//         .json({ message: "Score range not found, please seed data first" });
+
+//     await User.findByIdAndUpdate(userId, {
+//       $addToSet: { scores: scoreDoc._id },
+//     });
+
+//     return res.status(200).json({
+//       message: "Score linked to user",
+//       scoreId: scoreDoc._id,
+//       range: rangeKey,
+//     });
+//   } catch (err) {
+//     return res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
 import { Score } from "../models/Score.js";
 import { User } from "../models/User.js";
 
+// Fetch all scores
 export const getAllScores = async (req, res) => {
   try {
     const scores = await Score.find();
@@ -197,7 +289,7 @@ export const getAllScores = async (req, res) => {
   }
 };
 
-
+// Fetch score by numerical range
 export const getScoreByRange = async (req, res) => {
   try {
     let total_score = Number(req.params.range);
@@ -224,17 +316,23 @@ export const getScoreByRange = async (req, res) => {
   }
 };
 
-
+// Create scores (single or multiple)
 export const createScore = async (req, res) => {
   try {
-    await Score.insertMany(req.body);
+    let data = req.body;
+
+    // agar single object hai to array me convert karo
+    if (!Array.isArray(data)) data = [data];
+
+    await Score.insertMany(data);
     return res.status(201).json({ message: "Scores Added" });
   } catch (err) {
+    console.error("Error adding scores:", err);
     return res.status(400).json({ message: "Invalid Data Format" });
   }
 };
 
-
+// Submit user score
 export const submitUserScore = async (req, res) => {
   try {
     const userId = req.user?.id;
